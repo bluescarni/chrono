@@ -301,7 +301,10 @@ static inline void f_Count_AABB_AABB_Intersection(const uint index,
         num_contact[index] = 0;
         return;
     }
+#pragma omp parallel for schedule(dynamic)
     for (uint i = start; i < end; i++) {
+        uint local_count = 0;
+
         uint shapeA = aabb_number[i];
         real3 Amin = aabb_min_data[shapeA];
         real3 Amax = aabb_max_data[shapeA];
@@ -335,8 +338,11 @@ static inline void f_Count_AABB_AABB_Intersection(const uint index,
                 continue;
             if (current_bin(Amin, Amax, Bmin, Bmax, inv_bin_size_vec, bins_per_axis, bin_number[index]) == false)
                 continue;
-            count++;
+            local_count++;
         }
+
+#pragma omp atomic
+        count += local_count;
     }
 
     num_contact[index] = count;
@@ -366,6 +372,7 @@ static inline void f_Store_AABB_AABB_Intersection(const uint index,
     uint offset = num_contact[index];
     uint count = 0;
 
+#pragma omp parallel for schedule(dynamic)
     for (uint i = start; i < end; i++) {
         uint shapeA = aabb_number[i];
         real3 Amin = aabb_min_data[shapeA];
@@ -406,9 +413,13 @@ static inline void f_Store_AABB_AABB_Intersection(const uint index,
                 shapeA = shapeB;
                 shapeB = t;
             }
+
+            uint prev_count;
             // the two indices of the shapes that make up the contact
-            potential_contacts[offset + count] = ((long long)shapeA << 32 | (long long)shapeB);
-            count++;
+#pragma omp atomic capture
+            prev_count = count++;
+
+            potential_contacts[offset + prev_count] = ((long long)shapeA << 32 | (long long)shapeB);
         }
     }
 }
