@@ -34,7 +34,7 @@ CODE MODIFIED FROM:
 #define CHPROFILER_H
 
 //To disable built-in profiling, please comment out next line
-//#define CH_NO_PROFILE 1
+#define CH_NO_PROFILE 1
 
 #ifndef CH_NO_PROFILE
 
