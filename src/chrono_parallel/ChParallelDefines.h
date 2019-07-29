@@ -40,7 +40,7 @@ typedef int shape_type;
 #define custom_vector std::vector
 #endif
 
-#if defined _MSC_VER
+#if defined _MSC_VER || true
 class NullBuffer : public std::streambuf {
   public:
     int overflow(int c) { return c; }
@@ -51,8 +51,8 @@ static std::ostream null_stream(&null_buffer);
 #else
 // Enable thread safe logging
 #define ELPP_THREAD_SAFE
-#include "chrono_thirdparty/easylogging/easylogging.h"
-#define LOGGINGENABLED
+//#include "chrono_thirdparty/easylogging/easylogging.h"
+//#define LOGGINGENABLED
 
 #endif
 
