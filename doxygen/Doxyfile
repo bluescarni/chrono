@@ -341,7 +341,7 @@ IDL_PROPERTY_SUPPORT   = YES
 # all members of a group must be documented explicitly.
 # The default value is: NO.
 
-DISTRIBUTE_GROUP_DOC   = NO
+DISTRIBUTE_GROUP_DOC   = YES
 
 # If one adds a struct or class to a group and this option is enabled, then also
 # any nested class or struct is added to the same group. By default this option
@@ -798,7 +798,7 @@ INPUT_ENCODING         = UTF-8
 
 FILE_PATTERNS          = *.c *.cc *.cxx *.cpp *.c++ \
                          *.h *.hh *.hxx *.hpp *.h++ \
-                         *.cuh \
+                         *.cuh *.cu \
                          *.markdown *.md
 
 # The RECURSIVE tag can be used to specify whether or not subdirectories should

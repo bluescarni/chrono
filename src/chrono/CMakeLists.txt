@@ -47,6 +47,8 @@ set(ChronoEngine_core_SOURCES
     core/ChQuadrature.cpp
     core/ChBezierCurve.cpp
     core/ChCubicSpline.cpp
+    core/ChDistribution.cpp
+    core/ChLinearAlgebra.cpp
     )
 
 set(ChronoEngine_core_HEADERS
@@ -128,12 +130,10 @@ set(ChronoEngine_physics_SOURCES
     physics/ChLinkBase.cpp
     physics/ChLink.cpp
     physics/ChLinkDistance.cpp
-    physics/ChLinkMasked.cpp
     physics/ChLinkMarkers.cpp
     physics/ChLinkLock.cpp
     physics/ChLinkBrake.cpp
     physics/ChLinkBushing.cpp
-    physics/ChLinkEngine.cpp
     physics/ChLinkGear.cpp
     physics/ChLinkPulley.cpp
     physics/ChLinkLinActuator.cpp
@@ -200,6 +200,7 @@ set(ChronoEngine_physics_SOURCES
     physics/ChShaftsTorsionSpring.cpp
     physics/ChShaftsTorqueConverter.cpp
     physics/ChShaftsThermalEngine.cpp
+	physics/ChShaftsLoads.cpp
     physics/ChConveyor.cpp
     physics/ChFx.cpp
     physics/ChAssembly.cpp
@@ -209,6 +210,7 @@ set(ChronoEngine_physics_SOURCES
     physics/ChLoadContainer.cpp
     physics/ChLoad.cpp
     physics/ChLoadsBody.cpp
+	physics/ChLoadsXYZnode.cpp
     physics/ChLoadBodyMesh.cpp
     )
 
@@ -236,14 +238,12 @@ set(ChronoEngine_physics_HEADERS
     physics/ChLinkBrake.h
     physics/ChLinkBushing.h
     physics/ChLinkDistance.h
-    physics/ChLinkEngine.h
     physics/ChLinkForce.h
     physics/ChLinkGear.h
     physics/ChLinkLinActuator.h
     physics/ChLinkLock.h
     physics/ChLinkMarkers.h
     physics/ChLinkMask.h
-    physics/ChLinkMasked.h
     physics/ChLinkPointSpline.h
     physics/ChLinkPulley.h
     physics/ChLinksAll.h
@@ -302,6 +302,7 @@ set(ChronoEngine_physics_HEADERS
     physics/ChShaftsTorsionSpring.h
     physics/ChShaftsTorqueConverter.h
     physics/ChShaftsThermalEngine.h
+	physics/ChShaftsLoads.h
     physics/ChSolvmin.h
     physics/ChSystem.h
     physics/ChSystemNSC.h
@@ -338,6 +339,8 @@ set(ChronoEngine_fea_SOURCES
     fea/ChBeamSection.cpp
     fea/ChBeamSectionCosserat.cpp
     fea/ChElementBeamANCF.cpp
+    fea/ChElementBeamEuler.cpp
+    fea/ChElementCableANCF.cpp
     fea/ChElementGeneric.cpp
     fea/ChElementSpring.cpp
     fea/ChElementBar.cpp
@@ -376,6 +379,7 @@ set(ChronoEngine_fea_SOURCES
     fea/ChContactSurfaceMesh.cpp
     fea/ChMeshSurface.cpp
     fea/ChLoadContactSurfaceMesh.cpp
+    fea/ChMaterialShellANCF.cpp
     fea/ChMaterialShellReissner.cpp
     )
 
@@ -430,7 +434,6 @@ set(ChronoEngine_fea_HEADERS
     fea/ChPolarDecomposition.h
     fea/ChMatrixCorotation.h
     fea/ChVisualizationFEAmesh.h
-    fea/ChLinkInterface.h
     fea/ChLinkPointFrame.h
     fea/ChLinkDirFrame.h
     fea/ChLinkPointPoint.h
@@ -443,6 +446,7 @@ set(ChronoEngine_fea_HEADERS
     fea/ChUtilsFEA.h
     fea/ChLoadContactSurfaceMesh.h
     fea/ChRotUtils.h
+    fea/ChMaterialShellANCF.h
     fea/ChMaterialShellReissner.h
 )
 
@@ -1080,6 +1084,10 @@ set(ChronoEngine_utils_HEADERS
     utils/ChParserOpenSim.h
     utils/ChConvexHull.h
 )
+
+if(BUILD_BENCHMARKING)
+    set(ChronoEngine_utils_HEADERS ${ChronoEngine_utils_HEADERS} utils/ChBenchmark.h)
+endif()
 
 source_group(utils FILES
     ${ChronoEngine_utils_SOURCES}

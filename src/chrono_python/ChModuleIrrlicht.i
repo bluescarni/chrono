@@ -20,6 +20,7 @@
 // Turn on the documentation of members, for more intuitive IDE typing
 
 %feature("autodoc", "1");
+%feature("flatnested", "1");
 
 
 // Turn on the exception handling to intercept C++ exceptions
@@ -49,7 +50,11 @@
 #include <irrlicht.h>
 #include "chrono_irrlicht/ChIrrAppInterface.h"
 #include "chrono_irrlicht/ChIrrAssetConverter.h"
-
+#include "chrono_irrlicht/ChIrrTools.h"
+#include "chrono_irrlicht/ChIrrEffects.h"
+#include "chrono_irrlicht/ChIrrTools.h"
+#include "chrono_irrlicht/ChIrrWizard.h"
+#include "chrono_irrlicht/ChIrrCamera.h"
 using namespace chrono;
 using namespace chrono::irrlicht;
 using namespace irr;
@@ -101,7 +106,6 @@ using namespace gui;
 // is enough that a single class in an inheritance tree uses %shared_ptr, and all other in the 
 // tree must be promoted to %shared_ptr too).
 
-%shared_ptr(chrono::ChSystem)
 %shared_ptr(chrono::irrlicht::ChIrrNodeAsset)
 
 
@@ -124,9 +128,10 @@ using namespace gui;
 // in the .i file, before the %include of the .h, even if already forwarded in .h
 
 
-%import  "ChClassFactory.i"
-%import  "ChSystem.i"
-%import  "ChAsset.i"
+%import(module = "pychrono.core")  "ChClassFactory.i"
+%import(module = "pychrono.core")  "ChSystem.i"
+%import(module = "pychrono.core")  "ChAsset.i"
+%import(module = "pychrono.core")  "ChVector.i"
 
 %include "IReferenceCounted.h"
 %include "IImage.h"
@@ -149,6 +154,11 @@ using namespace gui;
 %include "dimension2d.h"
 %template(dimension2du) irr::core::dimension2d<irr::u32>;
 
+%ignore chrono::irrlicht::ScreenQuadCB;
+%include "chrono_irrlicht/ChIrrEffects.h"
+%include "chrono_irrlicht/ChIrrTools.h"
+%include "chrono_irrlicht/ChIrrCamera.h"
+%include "chrono_irrlicht/ChIrrWizard.h"
 %include "ChIrrAppInterface.i"
 %include "ChIrrAssetConverter.i"
 %include "ChIrrApp.i"
@@ -165,13 +175,13 @@ using namespace gui;
 // a lot of code bloat. 
 // Alternatively, in the following we create a set of Python-side
 // functions to perform casting by hand, thank to the macro 
-// %DefChSharedPtrDynamicDowncast(base,derived). 
+// %DefSharedPtrDynamicDowncast(base,derived). 
 // Do not specify the "chrono::" namespace before base or derived!
 // Later, in python, you can do the following:
 //  myvis = chrono.CastToChVisualizationShared(myasset)
 //  print ('Could be cast to visualization object?', !myvis.IsNull())
 
-%DefChSharedPtrDynamicDowncast(ChAsset,ChIrrNodeAsset)
+%DefSharedPtrDynamicDowncast2NS(chrono, chrono::irrlicht, ChAsset,ChIrrNodeAsset)
 
 
 //

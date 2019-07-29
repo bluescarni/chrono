@@ -104,7 +104,10 @@ double ChLugreTire::GetWidth() const {
 
 // -----------------------------------------------------------------------------
 // -----------------------------------------------------------------------------
-void ChLugreTire::Synchronize(double time, const WheelState& wheel_state, const ChTerrain& terrain) {
+void ChLugreTire::Synchronize(double time,
+                              const WheelState& wheel_state,
+                              const ChTerrain& terrain,
+                              CollisionType collision_type) {
     // Invoke the base class function.
     ChTire::Synchronize(time, wheel_state, terrain);
 
@@ -131,7 +134,7 @@ void ChLugreTire::Synchronize(double time, const WheelState& wheel_state, const 
 
         // Check contact with terrain and calculate contact points.
         m_data[id].in_contact =
-            disc_terrain_contact(terrain, disc_center, disc_normal, disc_radius, m_data[id].frame, depth);
+            DiscTerrainCollision(terrain, disc_center, disc_normal, disc_radius, m_data[id].frame, depth);
         if (!m_data[id].in_contact)
             continue;
 
@@ -144,7 +147,7 @@ void ChLugreTire::Synchronize(double time, const WheelState& wheel_state, const 
         // are reduced to the wheel center). If the resulting force is negative, the
         // disc is moving away from the terrain so fast that no contact force is
         // generated.
-        double Fn_mag = GetNormalStiffness() * depth - GetNormalDamping() * m_data[id].vel.z();
+        double Fn_mag = (GetNormalStiffness() * depth - GetNormalDamping() * m_data[id].vel.z()) / GetNumDiscs();
 
         if (Fn_mag < 0)
             Fn_mag = 0;

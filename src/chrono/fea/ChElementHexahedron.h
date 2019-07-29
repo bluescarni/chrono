@@ -21,28 +21,35 @@
 namespace chrono {
 namespace fea {
 
-///
 /// Class for hexahedral elements.
-///
 class ChApi ChElementHexahedron : public ChElement3D,
-                                     public ChElementCorotational
-//		    __ __ __ __				//
-{                                         //		  /			  /|			//
-  protected:                              //		 /_|__ __ __ / |			//
-    ChGaussIntegrationRule* ir;           //		|			|  |			//
-    std::vector<ChGaussPoint*> GpVector;  //		|  |		|  |			//
-                                          //		|	 __	 __	|  |			//
-                                          //		| /			| /				//
-                                          //		|__ __ __ __|/				//
+                                  public ChElementCorotational
+//                                        //       __ __ __ __      //
+{                                         //      /           /|    //
+  protected:                              //     /_ __ __ __ / |    //
+    ChGaussIntegrationRule* ir;           //    |           |  |    //
+    std::vector<ChGaussPoint*> GpVector;  //    |           |  |    //
+                                          //    |           |  |    //
+                                          //    |           | /     //
+                                          //    |__ __ __ __|/      //
   public:
     int ID;
+
+    ChElementHexahedron() : ir(nullptr) {}
+    
+    virtual ~ChElementHexahedron() {
+        delete ir;
+        for (auto gpoint : GpVector)
+            delete gpoint;
+        GpVector.clear();
+    }
 
     virtual void Update() {
         // parent class update:
         ChElement3D::Update();
         // always keep updated the rotation matrix A:
         this->UpdateRotation();
-    };
+    }
 };
 
 }  // end namespace fea

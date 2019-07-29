@@ -25,7 +25,7 @@ CH_FACTORY_REGISTER(ChLinkPointTriface)
 
 ChLinkPointTriface::ChLinkPointTriface() : react(VNULL), s2(0), s3(0), d(0) {}
 
-ChLinkPointTriface::ChLinkPointTriface(const ChLinkPointTriface& other) : ChLinkInterface(other) {
+ChLinkPointTriface::ChLinkPointTriface(const ChLinkPointTriface& other) : ChLinkBase(other) {
     react = other.react;
     s2 = other.s2;
     s3 = other.s3;
@@ -218,7 +218,7 @@ void ChLinkPointTriface::ConstraintsLoadJacobians() {
 
     // compute jacobians
     ChMatrix33<> Jxa;
-    Jxa.FillDiag(1.0);
+    Jxa.Set33Identity();
 
     ChMatrix33<> Jxb1;
     ChMatrix33<> Jxb2;
@@ -318,6 +318,9 @@ void ChLinkPointTriface::ConstraintsLoadJacobians() {
         Jxb3(2, 2) = -s3 - (d * t7 * t26 * t57) / 2;
     } else {
         // simplified jacobian when offset d = 0;
+        Jxb1.Reset();
+        Jxb2.Reset();
+        Jxb3.Reset();
         Jxb1.FillDiag(-s1);
         Jxb2.FillDiag(-s2);
         Jxb3.FillDiag(-s3);
@@ -368,7 +371,7 @@ CH_FACTORY_REGISTER(ChLinkPointTrifaceRot)
 
 ChLinkPointTrifaceRot::ChLinkPointTrifaceRot() : react(VNULL), s2(0), s3(0), d(0) {}
 
-ChLinkPointTrifaceRot::ChLinkPointTrifaceRot(const ChLinkPointTrifaceRot& other) : ChLinkInterface(other) {
+ChLinkPointTrifaceRot::ChLinkPointTrifaceRot(const ChLinkPointTrifaceRot& other) : ChLinkBase(other) {
     react = other.react;
     s2 = other.s2;
     s3 = other.s3;
@@ -557,7 +560,7 @@ void ChLinkPointTrifaceRot::ConstraintsLoadJacobians() {
 
     // compute jacobians
     ChMatrix33<> Jxa;
-    Jxa.FillDiag(1.0);
+    Jxa.Set33Identity();
 
     ChMatrix33<> Jxb1;
     ChMatrix33<> Jxb2;
@@ -657,6 +660,9 @@ void ChLinkPointTrifaceRot::ConstraintsLoadJacobians() {
         Jxb3(2, 2) = -s3 - (d * t7 * t26 * t57) / 2;
     } else {
         // simplified jacobian when offset d = 0;
+        Jxb1.Reset();
+        Jxb2.Reset();
+        Jxb3.Reset();
         Jxb1.FillDiag(-s1);
         Jxb2.FillDiag(-s2);
         Jxb3.FillDiag(-s3);
